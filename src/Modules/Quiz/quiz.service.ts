@@ -184,8 +184,11 @@ getQuizResults = async (
   if (req.user?.role !== "DOCTOR") {
     throw new ForbiddenExption("Only doctor can view results");
   }
+const { quizID } = req.params;
 
-  const { quizID } = req.params;
+  if (!quizID) {
+    throw new BadRequestExption("Quiz ID is required");
+  }
 
   const quiz = await this._quizModel.findById(quizID);
 
@@ -195,6 +198,17 @@ getQuizResults = async (
 
   const results =
     await this._submissionModel.findByQuiz(quizID);
+
+  // const { quizID } = req.params;
+
+  // const quiz = await this._quizModel.findById(quizID);
+
+  // if (!quiz) {
+  //   throw new NotFoundExption("Quiz not found");
+  // }
+
+  // const results =
+  //   await this._submissionModel.findByQuiz(quizID);
 
   return res.status(200).json({
     message: "Quiz results fetched successfully",
