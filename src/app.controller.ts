@@ -34,6 +34,7 @@ const limitter:RateLimitRequestHandler =rateLimit({
 
 export const bootstrap= async():Promise<void>=>{
     const app:Express = express();
+    app.set("trust proxy", 1);
     const port:number = Number(process.env.PORT) || 5000;
 app.use(limitter);
 app.use(cors(),express.json(),helmet());// glopal midelleware
