@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-
+import { BehaviorTypeEnum } from "../../DB/Models/examBehavior.model";
 import ExamMonitoringRepository, {
   ExamBehaviorRepository,
+  
 } from "../../DB/repositories/examMonitoring.repository";
 
 import {
@@ -51,54 +52,87 @@ export class ExamMonitoringService {
     });
   };
 
+
+
+
+  /// ai recorded/////////////////////////////////////////////////////////////
+ recordAiBehavior = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+
+  const { examID, behaviors } = req.body;
+
+  const behaviorData = behaviors.map(
+    (behavior: {
+      UserID: string;
+      type: BehaviorTypeEnum;
+    }) => ({
+      UserID: behavior.UserID,
+      examID,
+      type: behavior.type,
+      timestamp: new Date(),
+    })
+  );
+
+  const result =
+    await this._behaviorModel.createExamBehavior(
+      behaviorData
+    );
+
+  return res.status(201).json({
+    message: "Behaviors recorded successfully",
+    data: result,
+  });
+};
   // =====================
   // Record Behavior
   // =====================
-  recordBehavior = async (
-    req: Request,
-    res: Response
-  ): Promise<Response> => {
-    if (!req.user?.UserID) {
-      throw new BadRequestExption("User not found");
-    }
-if (req.user.role !== "STUDENT") {
-  throw new ForbiddenExption("Only students allowed");
-}
-    const { examID, type } = req.body;
+//   recordBehavior = async (
+//     req: Request,
+//     res: Response
+//   ): Promise<Response> => {
+//     if (!req.user?.UserID) {
+//       throw new BadRequestExption("User not found");
+//     }
+// if (req.user.role !== "STUDENT") {
+//   throw new ForbiddenExption("Only students allowed");
+// }
+//     const { examID, type } = req.body;
 
-    // تأكد إن فيه session شغال
-    const session = await this._examModel.findSession(
-      req.user.UserID,
-      examID
-    );
+//     // تأكد إن فيه session شغال
+//     const session = await this._examModel.findSession(
+//       req.user.UserID,
+//       examID
+//     );
 
-    if (!session) {
-      throw new NotFoundExption(
-        "Exam session not started"
-      );
-    }
+//     if (!session) {
+//       throw new NotFoundExption(
+//         "Exam session not started"
+//       );
+//     }
 
-    // تأكد إنه لسه منتهيش
-    if (session.endTime) {
-      throw new BadRequestExption(
-        "Exam already ended"
-      );
-    }
+//     // تأكد إنه لسه منتهيش
+//     if (session.endTime) {
+//       throw new BadRequestExption(
+//         "Exam already ended"
+//       );
+//     }
 
-    const behavior =
-      await this._behaviorModel.createBehavior([
-        {
-          UserID: req.user.UserID,
-          examID,
-          type,
-        },
-      ]);
+//     const behavior =
+//       await this._behaviorModel.createBehavior([
+//         {
+//           UserID: req.user.UserID,
+//           examID,
+//           type,
+//         },
+//       ]);
 
-    return res.status(201).json({
-      message: "Behavior recorded successfully",
-      data: behavior,
-    });
-  };
+//     return res.status(201).json({
+//       message: "Behavior recorded successfully",
+//       data: behavior,
+//     });
+//   };
 
   // =====================
   // End Exam

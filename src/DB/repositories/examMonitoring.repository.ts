@@ -57,13 +57,29 @@ export class ExamBehaviorRepo extends DatabaseRepository<IExamBehavior> {
   constructor() {
     super(ExamBehaviorModel as any);
   }
+//ai recorded
+  async createExamBehavior(
+  data: Partial<IExamBehavior>[],
+  options?: QueryOptions<IExamBehavior> | any
+): Promise<
+  ExamBehaviorDocument[] | undefined
+> {
 
-  async createBehavior(
-    data: Partial<IExamBehavior>[]
-  ): Promise<ExamBehaviorDocument[] | undefined> {
-    const result = await this.create({ data });
-    return result as ExamBehaviorDocument[] | undefined;
-  }
+  const result = await this.create({
+    data,
+    options,
+  });
+
+  return result as
+    | ExamBehaviorDocument[]
+    | undefined;
+}
+  // async createBehavior(
+  //   data: Partial<IExamBehavior>[]
+  // ): Promise<ExamBehaviorDocument[] | undefined> {
+  //   const result = await this.create({ data });
+  //   return result as ExamBehaviorDocument[] | undefined;
+  // }
 
   async findByExam(examID: string) {
     return await this.find({
@@ -71,6 +87,7 @@ export class ExamBehaviorRepo extends DatabaseRepository<IExamBehavior> {
     });
   }
 }
+
 
 // =======================
 // Exports

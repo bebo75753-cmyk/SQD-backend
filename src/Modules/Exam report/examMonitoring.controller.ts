@@ -8,7 +8,8 @@ import { validation } from "../../midellware/validation.midellware";
 
 import {
   startExamSchema,
-  recordBehaviorSchema,
+  // recordBehaviorSchema,
+  createExamBehaviorSchema,
   endExamSchema,
   getReportSchema,
 } from "./examMonitoring.validation";
@@ -24,16 +25,21 @@ router.post(
   validation(startExamSchema),
   ExamMonitoringService.startExam
 );
-
+router.post(
+  "/ai/exam-behavior",
+  aiAuthentication(),
+  validation(createExamBehaviorSchema),
+  ExamMonitoringService.recordAiBehavior
+);
 // =====================
 // Record Behavior
 // =====================
-router.post(
-  "/behavior",
-  aiAuthentication(),
-  validation(recordBehaviorSchema),
-  ExamMonitoringService.recordBehavior
-);
+// router.post(
+//   "/behavior",
+//   aiAuthentication(),
+//   validation(recordBehaviorSchema),
+ 
+// );
 
 // =====================
 // End Exam
