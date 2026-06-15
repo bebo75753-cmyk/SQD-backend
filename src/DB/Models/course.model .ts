@@ -12,6 +12,7 @@ export interface ICourse {
   department: string;
   instructor: string | IUser; // دكتور المادة
   createdAt: Date;
+  instructorName:string;
   updatedAt?: Date;
 }
 
@@ -44,6 +45,8 @@ const courseSchema = new Schema<ICourse, {}, CourseVirtuals>(
       required: true,
       min: 1,
     },
+    
+
     department: {
       type: String,
       required: true,
@@ -54,6 +57,13 @@ const courseSchema = new Schema<ICourse, {}, CourseVirtuals>(
       ref: "User",
       required: [true, "Instructor is required"],
     },
+    
+    instructorName:{
+    type: String,
+      required: true,
+      trim: true,
+      }
+    
   },
   {
     timestamps: true,

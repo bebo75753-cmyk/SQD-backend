@@ -14,10 +14,9 @@ export const createExamBehaviorSchema = {
         UserID: z.string().regex(/^STU\d+$/),
 
         type: z.enum([
-          "TAB_SWITCH",
-          "MULTIPLE_FACES",
+          "USING_PHONE",
           "LOOKING_AWAY",
-          "SCREEN_EXIT",
+          "TALKING_TO_OTHERS"
         ]),
       })
     ),

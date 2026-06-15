@@ -14,6 +14,7 @@ export const createCourseSchema = {
     capacity: z.number().min(1),
     department: z.string().min(2),
     instructor: genralFalds.UserID, // UserID الخاص بالدكتور
+    instructorName:z.string().min(3)
   }),
 };
 

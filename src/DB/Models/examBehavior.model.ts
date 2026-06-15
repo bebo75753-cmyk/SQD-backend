@@ -1,12 +1,11 @@
 import { Schema, model, models, HydratedDocument } from "mongoose";
 
 export enum BehaviorTypeEnum {
-  TAB_SWITCH = "TAB_SWITCH",
-  MULTIPLE_FACES = "MULTIPLE_FACES",
+  USING_PHONE = "USING_PHONE",
+  TALKING_TO_OTHERS = "TALKING_TO_OTHERS",
   LOOKING_AWAY = "LOOKING_AWAY",
-  SCREEN_EXIT = "SCREEN_EXIT",
+  
 }
-
 export interface IExamBehavior {
   UserID: string;
   examID: string;

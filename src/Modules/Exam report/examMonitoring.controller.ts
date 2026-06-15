@@ -26,7 +26,7 @@ router.post(
   ExamMonitoringService.startExam
 );
 router.post(
-  "/ai/exam-behavior",
+  "/ai_behavior",
   aiAuthentication(),
   validation(createExamBehaviorSchema),
   ExamMonitoringService.recordAiBehavior
