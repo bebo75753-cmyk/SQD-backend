@@ -195,6 +195,14 @@ export const decodedToken = async ({
 
         //  تحقق من تطابق الدور
         const userSignatureLevel = await getSignatureLevel(user.role);
+        console.log("========== TOKEN DEBUG ==========");
+console.log("decoded.role =", decoded.role);
+console.log("userRole (from signature) =", userRole);
+console.log("db.role =", user.role);
+console.log("dbSignatureLevel =", userSignatureLevel);
+console.log("ACCESS_DOCTOR_SIGNATURE =", process.env.ACCESS_DOCTOR_SIGNATURE?.length);
+console.log("ACCESS_STUDENT_SIGNATURE =", process.env.ACCESS_STUDENT_SIGNATURE?.length);
+console.log("ACCESS_ADMIN_SIGNATURE =", process.env.ACCESS_ADMIN_SIGNATURE?.length);
         if (userSignatureLevel !== userRole) {
             throw new UnathraziedExption("Role mismatch - invalid token for this user");
         }
