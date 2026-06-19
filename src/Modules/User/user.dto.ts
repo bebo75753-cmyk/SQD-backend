@@ -6,7 +6,8 @@ import {
   createStudentSchema,
   updateStudentSchema,
   deleteStudentSchema,
-  getAllDoctorsSchema
+  getAllDoctorsSchema,
+  getAllAdminsSchema
 } from "./user.validation";
 
 /**
@@ -19,12 +20,11 @@ export type IGetProfileDto = z.infer<typeof getProfileSchema.params>;
 export type IUpdateProfileDto = z.infer<typeof updateProfileSchema.body>;
 
 export type IGetAllStudentsDto = z.infer<typeof getAllStudentsSchema.query>;
-export type IGetAllDoctorsDto = z.infer<
-  typeof getAllDoctorsSchema.query
->;
+export type IGetAllDoctorsDto = z.infer< typeof getAllDoctorsSchema.query>;
 
 export type ICreateStudentDto = z.infer<typeof createStudentSchema.body>;
 
 export type IUpdateStudentDto = z.infer<typeof updateStudentSchema.body>;
 
 export type IDeleteStudentDto = z.infer<typeof deleteStudentSchema.params>;
+export type IGetAllAdminsDto =  z.infer<typeof getAllAdminsSchema.query>;

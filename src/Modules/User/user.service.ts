@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { UserRepository } from "../../DB/repositories/user.repository";
 import { UserModel, RoleEnum } from "../../DB/Models/user.model";
-import { BadRequestExption, NotFoundExption } from "../../Uitls/response/error.responsee";
+import {
+  BadRequestExption,
+  NotFoundExption,
+} from "../../Uitls/response/error.responsee";
 import { genrateHash } from "../../Uitls/security/hashing";
 
 /**
@@ -21,7 +24,7 @@ export class UserService {
 
     return res.status(200).json({
       message: "Profile fetched successfully",
-      data: userData
+      data: userData,
     });
   };
 
@@ -32,10 +35,13 @@ export class UserService {
 
     const updateData = req.body;
 
-    const updatedUser = await this._userModel.updateByUserID(user.UserID, updateData);
+    const updatedUser = await this._userModel.updateByUserID(
+      user.UserID,
+      updateData,
+    );
     return res.status(200).json({
       message: "Profile updated successfully",
-      data: updatedUser
+      data: updatedUser,
     });
   };
 
@@ -46,26 +52,33 @@ export class UserService {
     });
     return res.status(200).json({
       message: "All students fetched",
-      data: students
+      data: students,
+    });
+  };
+  // admin get all
+  getAllAdmins = async (req: Request, res: Response): Promise<Response> => {
+    const admins = await this._userModel.find({
+      filter: { role: RoleEnum.ADMIN },
+    });
+    return res.status(200).json({
+      message: "All ADMINS fetched",
+      data: admins,
     });
   };
 
   //  عرض جميع الدكاترة (Admin)
-getAllDoctors = async (
-  req: Request,
-  res: Response
-): Promise<Response> => {
-  const doctors =
-    await this._userModel.findAllDoctors();
+  getAllDoctors = async (req: Request, res: Response): Promise<Response> => {
+    const doctors = await this._userModel.findAllDoctors();
 
-  return res.status(200).json({
-    message: "All doctors fetched",
-    data: doctors,
-  });
-};
+    return res.status(200).json({
+      message: "All doctors fetched",
+      data: doctors,
+    });
+  };
   // ➕ إضافة طالب جديد (Admin)
   createStudent = async (req: Request, res: Response): Promise<Response> => {
-    const { UserID, username, email, password, major, level, phone, address } = req.body;
+    const { UserID, username, email, password, major, level, phone, address } =
+      req.body;
 
     const existing = await this._userModel.findByEmail(email);
     if (existing) throw new BadRequestExption("Email already exists");
@@ -91,7 +104,7 @@ getAllDoctors = async (
 
     return res.status(201).json({
       message: "Student created successfully",
-      data: newUser
+      data: newUser,
     });
   };
 
@@ -109,7 +122,7 @@ getAllDoctors = async (
 
     return res.status(200).json({
       message: "Student updated successfully",
-      data: updated
+      data: updated,
     });
   };
 
@@ -120,113 +133,108 @@ getAllDoctors = async (
     const deleted = await this._userModel.deleteOne({
       filter: { UserID: UserID },
     });
-console.log("DELETE RESULT:", deleted);
+    console.log("DELETE RESULT:", deleted);
 
     if (!deleted || deleted.deletedCount === 0)
       throw new NotFoundExption("Student not found or already deleted");
 
     return res.status(200).json({
-      message: "Student deleted successfully"
+      message: "Student deleted successfully",
     });
   };
 
   // delte Doc
   deleteDoctor = async (req: Request, res: Response): Promise<Response> => {
-  const { UserID } = req.params;
+    const { UserID } = req.params;
 
-  const deleted = await this._userModel.deleteOne({
-    filter: { UserID:UserID  },
-  });
+    const deleted = await this._userModel.deleteOne({
+      filter: { UserID: UserID },
+    });
 
-  if (!deleted || deleted.deletedCount === 0) {
-    throw new NotFoundExption("Doctor not found or already deleted");
-  }
+    if (!deleted || deleted.deletedCount === 0) {
+      throw new NotFoundExption("Doctor not found or already deleted");
+    }
 
-  return res.status(200).json({
-    message: "Doctor deleted successfully"
-  });
-};
+    return res.status(200).json({
+      message: "Doctor deleted successfully",
+    });
+  };
 
-//
+  //
 
-createDoctor = async (req: Request, res: Response): Promise<Response> => {
-  const { UserID, username, email, password, department, phone, address } = req.body;
+  createDoctor = async (req: Request, res: Response): Promise<Response> => {
+    const { UserID, username, email, password, department, phone, address } =
+      req.body;
 
-  // 🔍 تحقق من التكرار
-  const existing = await this._userModel.findByEmail(email);
-  if (existing) throw new BadRequestExption("Email already exists");
+    // 🔍 تحقق من التكرار
+    const existing = await this._userModel.findByEmail(email);
+    if (existing) throw new BadRequestExption("Email already exists");
 
-  // 🔐 تشفير الباسورد
-  const hashedPassword = await genrateHash(password);
+    // 🔐 تشفير الباسورد
+    const hashedPassword = await genrateHash(password);
 
-  // 🆕 إنشاء الدكتور
-  const newDoctor = await this._userModel.createUser({
-    data: [
-      {
-        UserID,
-        username,
-        email,
-        password: hashedPassword,
-        role: RoleEnum.DOCTOR,
-        department,
-        phone,
-        address
-      }
-    ],
-    options: { validateBeforeSave: true }
-  });
+    // 🆕 إنشاء الدكتور
+    const newDoctor = await this._userModel.createUser({
+      data: [
+        {
+          UserID,
+          username,
+          email,
+          password: hashedPassword,
+          role: RoleEnum.DOCTOR,
+          department,
+          phone,
+          address,
+        },
+      ],
+      options: { validateBeforeSave: true },
+    });
 
-  return res.status(201).json({
-    message: "Doctor created successfully",
-    data: newDoctor
-  });
-};
+    return res.status(201).json({
+      message: "Doctor created successfully",
+      data: newDoctor,
+    });
+  };
 
+  getDoctorById = async (req: Request, res: Response): Promise<Response> => {
+    const { UserID } = req.params;
 
-getDoctorById = async (req: Request, res: Response): Promise<Response> => {
-  const { UserID } = req.params;
+    const doctor = await this._userModel.findOne({
+      filter: { UserID: UserID, role: RoleEnum.DOCTOR },
+    });
 
-  const doctor = await this._userModel.findOne({
-    filter: { UserID: UserID, role: RoleEnum.DOCTOR }
-  });
+    if (!doctor) {
+      throw new NotFoundExption("Doctor not found");
+    }
 
-  if (!doctor) {
-    throw new NotFoundExption("Doctor not found");
-  }
+    return res.status(200).json({
+      message: "Doctor fetched successfully",
+      data: doctor,
+    });
+  };
 
-  return res.status(200).json({
-    message: "Doctor fetched successfully",
-    data: doctor
-  });
-};
+  //
+  updateDoctor = async (req: Request, res: Response): Promise<Response> => {
+    const { UserID } = req.params;
+    const updateData = req.body;
 
-//
-updateDoctor = async (req: Request, res: Response): Promise<Response> => {
-  const { UserID } = req.params;
-  const updateData = req.body;
+    const updated = await this._userModel.updateOne({
+      filter: { UserID },
+      update: updateData,
+    });
 
-  const updated = await this._userModel.updateOne({
-    filter: { UserID },
-    update: updateData,
-  });
+    if (!updated) {
+      throw new NotFoundExption("Doctor not found");
+    }
 
-  if (!updated) {
-    throw new NotFoundExption("Doctor not found");
-  }
-
-  return res.status(200).json({
-    message: "Doctor updated successfully",
-    data: updated
-  });
-};
-
-
+    return res.status(200).json({
+      message: "Doctor updated successfully",
+      data: updated,
+    });
+  };
 }
 
 export default new UserService();
-
-
-
 
 // import { Request, Response } from "express";
 // import { UserRepository } from "../../DB/repositories/user.repository";

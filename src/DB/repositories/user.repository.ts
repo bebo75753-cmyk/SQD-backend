@@ -192,6 +192,19 @@ override async deleteOne(
     });
     return result as UserDocument[];
   }
+   async findAllAdmins(
+    select: ProjectionType<IUser> | null = null,
+    options: QueryOptions<IUser> | null = null
+  ): Promise<UserDocument[]> {
+    const result = await this.find({
+      filter: { role: RoleEnum.ADMIN },
+      select,
+      options,
+    });
+    return result as UserDocument[];
+  }
 }
+
+
 
 

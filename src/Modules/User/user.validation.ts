@@ -41,6 +41,7 @@ export const getAllDoctorsSchema = {
     })
     .optional(),
 };
+
 /**
  *  إضافة طالب جديد (POST /admin/students)
  */
@@ -133,4 +134,10 @@ export const deleteDoctorSchema ={
       message: "Invalid Doctor ID format",
     }),
   }),
+};
+export const getAllAdminsSchema = {
+  query: z.object({
+    page: z.string().optional(),
+    limit: z.string().optional(),
+  }).optional(),
 };
