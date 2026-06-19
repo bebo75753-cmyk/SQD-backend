@@ -10,7 +10,7 @@ export const getProfileSchema = {
 };
 
 /**
- * ✏️ تعديل الملف الشخصي (PUT /profile)
+ *  تعديل الملف الشخصي (PUT /profile)
  */
 export const updateProfileSchema = {
   body: z.strictObject({
@@ -22,7 +22,7 @@ export const updateProfileSchema = {
 };
 
 /**
- * 📋 عرض جميع الطلاب (GET /admin/students)
+ * عرض جميع الطلاب (GET /admin/students)
  */
 export const getAllStudentsSchema = {
   query: z.object({
@@ -30,9 +30,19 @@ export const getAllStudentsSchema = {
     limit: z.string().optional(),
   }).optional(),
 };
-
 /**
- * ➕ إضافة طالب جديد (POST /admin/students)
+ * عرض جميع الدكاترة (GET /admin/doctors)
+ */
+export const getAllDoctorsSchema = {
+  query: z
+    .object({
+      page: z.string().optional(),
+      limit: z.string().optional(),
+    })
+    .optional(),
+};
+/**
+ *  إضافة طالب جديد (POST /admin/students)
  */
 export const createStudentSchema = {
   body: z.strictObject({
@@ -48,7 +58,7 @@ export const createStudentSchema = {
 };
 
 /**
- * 🔄 تعديل بيانات طالب (PUT /admin/students/:id)
+ *  تعديل بيانات طالب (PUT /admin/students/:id)
  */
 export const updateStudentSchema = {
   params: z.object({

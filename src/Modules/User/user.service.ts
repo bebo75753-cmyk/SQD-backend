@@ -39,7 +39,7 @@ export class UserService {
     });
   };
 
-  // 📋 عرض جميع الطلاب (Admin)
+  // 📋عرض جميع الطلاب (Admin)
   getAllStudents = async (req: Request, res: Response): Promise<Response> => {
     const students = await this._userModel.find({
       filter: { role: RoleEnum.STUDENT },
@@ -50,6 +50,19 @@ export class UserService {
     });
   };
 
+  //  عرض جميع الدكاترة (Admin)
+getAllDoctors = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const doctors =
+    await this._userModel.findAllDoctors();
+
+  return res.status(200).json({
+    message: "All doctors fetched",
+    data: doctors,
+  });
+};
   // ➕ إضافة طالب جديد (Admin)
   createStudent = async (req: Request, res: Response): Promise<Response> => {
     const { UserID, username, email, password, major, level, phone, address } = req.body;
@@ -206,6 +219,7 @@ updateDoctor = async (req: Request, res: Response): Promise<Response> => {
     data: updated
   });
 };
+
 
 }
 

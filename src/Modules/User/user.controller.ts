@@ -10,7 +10,7 @@ import {
   deleteStudentSchema,
   deleteDoctorSchema,
   updateDoctorSchema,
-  createDoctorSchema,getDoctorByIdSchema
+  createDoctorSchema,getDoctorByIdSchema,getAllDoctorsSchema
 } from "./user.validation";
 import { authentacation } from "../../midellware/athuntacation.madrllware";
 
@@ -27,6 +27,7 @@ router.post("/admin/students", authentacation(), validation(createStudentSchema)
 router.put("/admin/students/:UserID", authentacation(), validation(updateStudentSchema), UserService.updateStudent);
 router.delete("/admin/students/:UserID", authentacation(), validation(deleteStudentSchema), UserService.deleteStudent);
 
+router.get("/admin/doctors", authentacation(), validation(getAllDoctorsSchema), UserService.getAllDoctors);
 router.delete("/admin/doctors/:UserID", authentacation(), validation(deleteDoctorSchema), UserService.deleteDoctor);
 router.put("/admin/doctors/:UserID",authentacation(),validation(updateDoctorSchema), UserService.updateDoctor);
 router.post("/admin/doctors",authentacation(),validation(createDoctorSchema),UserService.createDoctor);
